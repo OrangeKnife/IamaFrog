@@ -10,15 +10,22 @@ public class Mosquito : MonoBehaviour {
     private Vector3 targetPos;
     private float movingSpeed = 30;
     private int circlingDir = 1;
-    
+    private bool bCought;
+
+    private Selectable selectableScript;
 
     void Start () {
         playerRef = GameObject.Find("Player").GetComponent<Player>();
         circlingDir = (Random.value > 0.5f ? 1 : -1);
+
+        selectableScript = gameObject.GetComponent<Selectable>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (bCought)
+            return;
+
         updateTargetPos();
         updateMovement();
     }
@@ -45,10 +52,26 @@ public class Mosquito : MonoBehaviour {
 
         playerRef.StartFocus();
         playerRef.SetCurrentFocusObject(gameObject);
+
+        selectableScript.selectBy(playerRef.gameObject);
+
     }
 
     public void EndFocus()
     {
         playerRef.EndFocus();
+
+        selectableScript.deSelect();
+    }
+
+    public void caught(GameObject byTongue)
+    {
+        bCought = true;
+        gameObject.transform.parent = byTongue.transform;
+    }
+
+    public void beforeDie()
+    {
+        
     }
 }
