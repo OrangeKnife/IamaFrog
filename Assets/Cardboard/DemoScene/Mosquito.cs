@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Mosquito : MonoBehaviour {
+	public AudioClip scoreSound;
     public float circlingSpeed;
     public int difficultyValue = 0;
 
@@ -13,12 +14,14 @@ public class Mosquito : MonoBehaviour {
     private bool bCought;
 
     private Selectable selectableScript;
+	private AudioSource asource;
 
     void Start () {
         playerRef = GameObject.Find("Player").GetComponent<Player>();
         circlingDir = (Random.value > 0.5f ? 1 : -1);
 
         selectableScript = gameObject.GetComponent<Selectable>();
+		asource = gameObject.GetComponent<AudioSource> ();
     }
 	
 	// Update is called once per frame
@@ -72,6 +75,25 @@ public class Mosquito : MonoBehaviour {
 
     public void beforeDie()
     {
-        
+		asource.clip = scoreSound;
+		asource.loop = false;
+		asource.Play();
     }
+
+	public void Die(float time)
+	{
+		StartCoroutine (SelfDestruction (time));
+	}
+
+	IEnumerator SelfDestruction(float sec)
+	{
+		yield return new WaitForSeconds(sec);
+		Spawner.currentSpawned --;
+		Destroy (gameObject);
+	}
+
+	public void tap()
+	{
+		playerRef.Tongue ();
+	}
 }

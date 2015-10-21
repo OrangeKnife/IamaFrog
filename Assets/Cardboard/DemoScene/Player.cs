@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class Player : MonoBehaviour {
     public float focusTimeToEat;
     public GameObject tongueObj;
+
 
     private static float focusStartTime;
 
@@ -11,10 +13,16 @@ public class Player : MonoBehaviour {
 
     private Animator animator;
 
+	private AudioSource asource;
+
+
+
     // Use this for initialization
     void Start () {
         focusStartTime = -1f;
         animator = GetComponentInChildren<Animator>();
+		asource = GetComponent<AudioSource> ();
+
     }
 	
 	// Update is called once per frame
@@ -46,8 +54,9 @@ public class Player : MonoBehaviour {
     public void Tongue()
     {
         focusStartTime = -1f;
-
+		tongueObj.GetComponent<TongueScript>().SetMeshActive(true);
         animator.Play("TongueAttack");
+		asource.Play ();
 
 
         if (CurrentFocusObject != null)

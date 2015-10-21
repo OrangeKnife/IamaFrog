@@ -8,7 +8,8 @@ public class Spawner : MonoBehaviour {
     public int maxSpawnNum;
     private Camera cam;
     private float lastSpawnTime;
-    private int currentSpawned;
+    
+	public static int currentSpawned = 0;
 
     // Use this for initialization
     void Start () {
